@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* Add CSS styles for centering the form */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="{{ url_for('submit_form')}}">
+        <label for="id">Employee ID:</label>
+        <input type="text" id="id" name="id" value=""><br>
+
+        <label for="fname">Name:</label>
+        <input type="text" id="fname" name="fname" value=""><br>
+
+        <label for="lname">Number:</label>
+        <input type="text" id="lname" name="lname" value=""><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

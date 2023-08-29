@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+  </style>
+
+
+<body>
+
+<!--ajax call script for deletion-->
+<script>
+  function deleteRow(name) {
+  fetch(`/delete?eid=${name}`, {
+    method: 'GET'
+  })
+  .then(function(response) {
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      console.error('Error deleting data from the server');
+    }
+  })
+  .catch(function(error) {
+    console.error('Error:', error);
+  });
+}
+</script>
+
+
+
+<!--update script-->
+
+<script>
+
+function updateRow() {
+  const id = document.getElementById('updateModal').getAttribute('data-id');
+  const newName = document.getElementById('newName').value;
+  const newNum = document.getElementById('newNum').value;
+
+  console.log(id, newName, newNum);
+  //  AJAX call re-quest to update the data on the server
+  fetch(`/update`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `eid=${id}&name=${newName}&num=${newNum}`
+  })
+  .then(function(response) {
+    if (response.ok) {
+      closeModal(); // Close the modal on success
+      window.location.reload();
+    } else {
+      console.error('Error updating data on the server');
+    }
+  })
+  .catch(function(error) {
+    console.error('Error:', error);
+  });
+}
+
+
+  // Function to open the modal
+  function openModal(id) {
+  // Store the id as an attribute within the modal
+  document.getElementById('updateModal').setAttribute('data-id', id);
+  document.getElementById('updateModal').style.display = 'block';
+}
+
+
+// Function to close the modal
+function closeModal() {
+  document.getElementById('updateModal').style.display = 'none';
+}
+
+</script>
+
+
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>NAME</th>
+    <th>NUMBER</th>
+    <th>Action</th>
+      <br>
+  </tr>
+
+
+  {% for i in name %}
+  <tr>
+    <td>{{i.name}}</td>
+    <td>{{i.age}}</td>
+    <td>{{i.num}}</td>
+
+
+    <td><button class="delete-button" style="background-color: darkred;" onclick="deleteRow('{{i.name}}')">Delete</button>
+  <button class="update-button" style="background-color: orange;" onclick="openModal('{{i.name}}')" data-id="{{i.name}}">Update</button>
+    </td>
+
+
+
+    <br>
+  </tr>
+
+    <br>
+
+    <div id="updateModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Update Data</h2>
+        <form id="updateForm">
+          <label for="newName">New Name:</label>
+          <input type="text" id="newName" required><br>
+          <label for="newNum">New Number:</label>
+          <input type="text" id="newNum" required><br>
+          <button type="button" onclick="updateRow()">Save Changes</button>
+          <button onclick=closeModal() >close</button>
+        </form>
+      </div>
+    </div>
+    
+    {% endfor %}
+</table>
+
+<!--modal-->
+
+
+
+
+
+</body>
+</html>
+
+
+
+
